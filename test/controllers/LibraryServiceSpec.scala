@@ -52,5 +52,19 @@ class LibraryServiceSpec extends BaseSpec with MockFactory with ScalaFutures wit
         result shouldBe Left(BadAPIResponse(500, "Could not connect"))
       }
     }
-  }
+    "return an error" in {
+      val url: String = "testUrl"
+
+      (mockConnector.get[Book](_: String)(_: OFormat[Book], _: ExecutionContext))
+        .expects(url, *, *)
+        .returning(Future(gameOfThrones.as[Book]))// How do we return an error?
+        .once()
+
+      whenReady(testService.getGoogleBook(urlOverride = Some(url), search = "", term = "")) { result =>
+        result shouldBe gameOfThrones.as[Book]
+      }
+
+      }
+    }
+
 }

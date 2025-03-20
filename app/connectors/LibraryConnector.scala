@@ -3,9 +3,11 @@ package connectors
 import models.APIError
 import play.api.libs.json.OFormat
 import play.api.libs.ws.{WSClient, WSResponse}
-import cats.data.EitherT
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import cats.data.EitherT
+
+
 
 
 class LibraryConnector @Inject()(ws: WSClient) {
@@ -22,5 +24,6 @@ class LibraryConnector @Inject()(ws: WSClient) {
           Left(APIError.BadAPIResponse(500, "Could not connect"))
         }
     }
+  }
 }
 }

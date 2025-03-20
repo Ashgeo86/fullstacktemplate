@@ -1,5 +1,6 @@
 package services
 
+import cats.data.EitherT
 import connectors.LibraryConnector
 import models.{APIError, Book, DataModel}
 import play.api.libs.json.OFormat.oFormatFromReadsAndOWrites

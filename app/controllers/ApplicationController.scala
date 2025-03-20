@@ -1,15 +1,15 @@
 package controllers
 
+
 import akka.util.Helpers.Requiring
-import models.DataModel
+import models.{APIError, Book, DataModel}
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
 import repositories.DataRepository
 import services.LibraryService
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import javax.inject.Singleton
 
 @Singleton
 class ApplicationController @Inject()(
@@ -45,15 +45,20 @@ class ApplicationController @Inject()(
     }
   }
 
-  def index(): Action[AnyContent] = Action.async { implicit request =>
-    dataRepository.index().map{
-      case Right(item: Seq[DataModel]) => if (item.length < 1 ) {
-      BadRequest}
-      else
-     {Ok {Json.toJson(item)}}
-      case Left(_) => BadRequest(Json.toJson("Unable to find any books"))
+  def index(): Future[Either[APIError.BadAPIResponse, Seq[DataModel]]] =
+    dataRepository.collection.find().toFuture().map {
+      case books: Seq[DataModel] => Right(books)
+      case _ => Left(APIError.BadAPIResponse(404, "Books cannot be found"))
     }
-  }
+//  def index(): Action[AnyContent] = Action.async { implicit request =>
+//    dataRepository.index().map{
+//      case Right(item: Seq[DataModel]) => if (item.length < 1 ) {
+//      BadRequest}
+//      else
+//     {Ok {Json.toJson(item)}}
+//      case Left(_) => BadRequest(Json.toJson("Unable to find any books"))
+//    }
+//  }
 
   def delete(id:String): Action[JsValue] = Action.async(parse.json) { implicit request =>
     request.body.validate[DataModel] match {
