@@ -1,6 +1,9 @@
 import baseSpec.BaseSpec
+import cats.data.EitherT
+import com.mongodb.reactivestreams.client.internal.OperationExecutorImpl
 import connectors.LibraryConnector
-import models.{Book, DataModel}
+import models.APIError.BadAPIResponse
+import models.{APIError, Book, DataModel}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -25,15 +28,28 @@ class LibraryServiceSpec extends BaseSpec with MockFactory with ScalaFutures wit
     val url: String = "testUrl"
 
     "return a book" in {
-      val testing = (mockConnector.get[Book](_: String)(_: OFormat[Book], _: ExecutionContext))
+      val testing = (mockConnector.get[Book](_: String)(_: OFormat[Book], _: ExecutionContext): EitherT[Future, APIError, Book])
         .expects(url, *, *)
-        .returning(Future(gameOfThrones.as[Book]))
+        .returning(EitherT.rightT(gameOfThrones.as[Book]))
         .once()
 
       println(testing)
 
-      whenReady(testService.getGoogleBook(urlOverride = Some(url), search = "", term = "")) { result =>
-        result shouldBe gameOfThrones.as[Book]
+      whenReady(testService.getGoogleBook(urlOverride = Some(url), search = "", term = "").value) { result =>
+        result shouldBe Right(gameOfThrones.as[Book])
+      }
+    }
+
+    "return an error" in {
+      val url: String = "testUrl"
+
+      (mockConnector.get[Book](_: String)(_: OFormat[Book], _: ExecutionContext))
+        .expects(url, *, *)
+        .returning(EitherT.leftT(APIError.BadAPIResponse(500, "Could not connect")))
+        .once()
+
+      whenReady(testService.getGoogleBook(urlOverride = Some(url), search = "", term = "").value) { result =>
+        result shouldBe Left(BadAPIResponse(500, "Could not connect"))
       }
     }
     "return an error" in {

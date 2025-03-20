@@ -4,7 +4,7 @@ import cats.data.EitherT
 import connectors.LibraryConnector
 import models.{APIError, Book, DataModel}
 import play.api.libs.json.OFormat.oFormatFromReadsAndOWrites
-
+import cats.data.EitherT
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import javax.inject.Singleton

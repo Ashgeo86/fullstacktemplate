@@ -3,11 +3,10 @@ package connectors
 import models.APIError
 import play.api.libs.json.OFormat
 import play.api.libs.ws.{WSClient, WSResponse}
-
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import cats.data.EitherT
-//import cats.syntax.all._
+
 
 
 
@@ -26,4 +25,5 @@ class LibraryConnector @Inject()(ws: WSClient) {
         }
     }
   }
+}
 }

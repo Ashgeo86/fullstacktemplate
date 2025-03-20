@@ -1,4 +1,5 @@
 package models
+
 import play.api.http.Status
 
 sealed abstract class APIError(
