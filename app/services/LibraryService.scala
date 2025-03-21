@@ -28,10 +28,16 @@ class LibraryService @Inject()(connector: LibraryConnector) {
     val max = s"maxResults=$maxResults"
     val query = s"$search:$formattedTerm"
     val url = s"https://www.googleapis.com/books/v1/volumes?q=$query&$maxResults&$orderBy"
+
+    println(s"I am making a request to the Url: $url")
+
     val result = connector.get[GoogleBooksResponse](url)
 
     result.map { googleBooksResponse =>
       googleBooksResponse.items.map { googleBook =>
+
+        println(s"here is the book you wanted: ${googleBook.volumeInfo.title}")
+
         Book(
           isbn = googleBook.volumeInfo.industryIdentifiers.find(_.`type` == "ISBN_13").map(_.identifier).getOrElse(""),
           title = googleBook.volumeInfo.title,

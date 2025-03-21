@@ -24,6 +24,11 @@ class LibraryServiceSpec extends BaseSpec with MockFactory with ScalaFutures wit
     "pageCount" -> 100
   )
 
+  //"getClosetMatches" should {
+    //val bookSearch = getClosestMatches("title", "Harry Potter", 5)
+  //}
+
+
   "getGoogleBook" should {
     val url: String = "testUrl"
 

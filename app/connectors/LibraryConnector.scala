@@ -7,7 +7,7 @@ import cats.data.EitherT
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-
+//? Uses
 class LibraryConnector @Inject()(ws: WSClient) {
   def get[Response](url: String)(implicit rds: OFormat[Response], ec: ExecutionContext): EitherT[Future, APIError, Response] = {
     val request = ws.url(url)
