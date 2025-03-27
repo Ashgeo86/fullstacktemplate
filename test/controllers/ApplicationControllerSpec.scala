@@ -121,7 +121,7 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
 
       status(createdResult) shouldBe Status.CREATED
 
-      val updateRequest: FakeRequest[JsValue] = buildPost("/api/${dataModel._id}").withBody[JsValue](Json.toJson(dataModel.copy(title="New name")))
+      val updateRequest: FakeRequest[JsValue] = buildPost("/api/${dataModel._id}").withBody[JsValue](Json.toJson(dataModel.copy(name="New name")))
       val updateResult: Future[Result] = TestApplicationController.update(dataModel._id)(updateRequest)
 
       status(updateResult) shouldBe Status.ACCEPTED

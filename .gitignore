@@ -54,3 +54,5 @@ bin/
 .scala_dependencies
 .cache-main
 .bsp/sbt.json
+test.zip
+

@@ -1,0 +1,59 @@
+@(userId: String, username: String, books: Seq[models.Book])(implicit request: RequestHeader)
+
+@main("My Books") {
+<div class="container">
+    <h1>Welcome, @username!</h1>
+
+    <h2>My Books</h2>
+
+    @if(books.isEmpty) {
+    <p>You haven't added any books to your collection yet.</p>
+    <a href="@routes.HomeController.index()" class="btn">Search for Books</a>
+    } else {
+    <div class="book-grid">
+        @for(book <- books) {
+        <div class="book-card">
+            <img src="@extractImageUrl(book.imageLinks)" alt="@book.title cover">
+            <h3>@book.title</h3>
+            <p>
+                @if(book.description.length > 50) {
+                @book.description.substring(0, 50)...
+                } else {
+                @book.description
+                }
+            </p>
+
+            <form action="@routes.BookController.removeFromFavorites()" method="POST">
+                @helper.CSRF.formField
+                <input type="hidden" name="isbn" value="@book.isbn">
+                <button type="submit" class="btn">Remove</button>
+            </form>
+        </div>
+        }
+    </div>
+    }
+
+    <div class="container">
+        <h1>Search for Books</h1>
+
+        <form action="@routes.HomeController.search()" method="GET" class="search-form">
+            <label>
+                <input type="text" name="query" placeholder="Search for books..." required>
+            </label>
+            <button type="submit" class="btn">Search</button>
+        </form>
+
+        <p>Search for some great reads.</p>
+    </div>
+
+</div>
+}
+@* Helper function to extract the URL from ImageLinks wrapper *@
+@extractImageUrl(url: String) = @{
+if (url != null && url.startsWith("ImageLinks(") && url.endsWith(")")) {
+url.substring("ImageLinks(".length, url.length - 1)
+} else {
+url
+}
+}
+

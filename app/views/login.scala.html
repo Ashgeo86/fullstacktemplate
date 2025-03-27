@@ -1,0 +1,32 @@
+@()(implicit request: RequestHeader)
+
+@main("Login") {
+  <div class="container">
+    <h1>Login</h1>
+    
+    @if(request.flash.get("error").isDefined) {
+      <div class="error-message">
+        @request.flash.get("error").get
+      </div>
+    }
+    
+    <form action="@routes.UserController.validateLogin" method="POST">
+      @helper.CSRF.formField
+
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      
+      <button type="submit" class="btn">Login</button>
+    </form>
+    
+    <p>Don't have an account? <a href="@routes.UserController.registerPage()">Register here</a></p>
+  </div>
+}
+

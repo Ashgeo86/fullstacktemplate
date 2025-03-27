@@ -82,7 +82,6 @@ class ApplicationController @Inject()(
     Ok(views.html.hobbit())
   }
 
-
   def googleBookSearch(search: String): Action[AnyContent] = Action.async { implicit request =>
 
     service.getGoogleBook(search = search).value.map {

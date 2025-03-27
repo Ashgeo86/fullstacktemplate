@@ -1,0 +1,55 @@
+@(books: ResultList)(implicit request: RequestHeader)
+
+@main("Search Results") {
+<div class="container">
+    <h1>Search Results</h1>
+
+    <a href="@routes.HomeController.index()" class="btn">New Search</a>
+
+    @if(books.items.isEmpty) {
+    <p>No books found matching your search criteria.</p>
+    } else {
+    <div class="book-grid">
+        @for(book <- books.items) {
+            <div class="card p-4" style="width: 18rem;">
+                <img src="@{
+                            book.volumeInfo.imageLinks match {
+                                case Some(n) => n.thumbnail
+                                case None => "https://code-artisan.io/wp-content/uploads/2020/12/default_book_cover_2015.jpg"
+                }
+                }" class="card-img-top" alt="Book cover">
+
+                <h5 class="card-title">@book.volumeInfo.title</h5>
+                <p>Pages: @book.volumeInfo.pageCount.getOrElse(0)</p>
+
+                <p>
+                    @(book.volumeInfo.description match {
+                        case Some(text) =>
+                            if (text.length > 50) {
+                                text.substring(0, 50) + "..."
+                            } else {
+                                text
+                            }
+                        case None =>
+                            "No description here!!"
+                    })
+                </p>
+
+                @if(request.session.get("userId").isDefined) {
+                <form action="@routes.BookController.addToFavorites()" method="POST">
+                    @helper.CSRF.formField
+                    <input type="hidden" name="isbn" value="@book.volumeInfo.industryIdentifiers.mkString(",")">
+                    <input type="hidden" name="title" value="@book.volumeInfo.title">
+                    <input type="hidden" name="pageCount" value="@book.volumeInfo.pageCount.getOrElse(0)">
+                    <input type="hidden" name="imageLinks" value="@book.volumeInfo.imageLinks.getOrElse("")">
+                    <input type="hidden" name="description" value="@book.volumeInfo.description.getOrElse("No description provided")">
+                    <button type="submit" class="btn">Add to My Books</button>
+                </form>
+                }
+            </div>
+
+        }
+    </div>
+    }
+</div>
+}

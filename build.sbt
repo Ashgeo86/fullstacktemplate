@@ -7,6 +7,11 @@ libraryDependencies += ws
 
 libraryDependencies += ("org.typelevel"                %% "cats-core"                 % "2.3.0")
 
+libraryDependencies ++= Seq(
+  "org.reactivemongo" %% "play2-reactivemongo" % "1.1.0-play30.RC15"
+)
+
+
 lazy val root = (project in file("."))
   .settings(
     name := "FullStackTemplate"
@@ -20,7 +25,8 @@ libraryDependencies ++= Seq(
   guice,
   "org.scalatest"          %% "scalatest"               % "3.2.15"             % Test,
   "org.scalamock"          %% "scalamock"               % "5.2.0"             % Test,
-  "org.scalatestplus.play" %% "scalatestplus-play"   % "5.1.0"          % Test
+  "org.scalatestplus.play" %% "scalatestplus-play"   % "5.1.0"          % Test,
+
 
 )
 

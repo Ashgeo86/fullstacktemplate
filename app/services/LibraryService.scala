@@ -4,6 +4,7 @@ import connectors.LibraryConnector
 import models.{APIError, Book, GoogleBook,ResultList, GoogleBooksResponse, IndustryIdentifier}
 import play.api.libs.json.OFormat.oFormatFromReadsAndOWrites
 import cats.data.EitherT
+import cats.implicits.toUnorderedFoldableOps
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,14 +43,13 @@ class LibraryService @Inject()(connector: LibraryConnector) {
           isbn = googleBook.volumeInfo.industryIdentifiers.find(_.`type` == "ISBN_13").map(_.identifier).getOrElse(""),
           title = googleBook.volumeInfo.title,
           pageCount = googleBook.volumeInfo.pageCount.getOrElse(0),
+          imageLinks = googleBook.volumeInfo.imageLinks.mkString,
           description = googleBook.volumeInfo.description.getOrElse("No description provided")
+//            description = googleBook.volumeInfo.description.getOrElse("No description provided")
         )
       }
     }
   }
-
-
-
 }
 
 

@@ -4,21 +4,34 @@ GET     /                           controllers.HomeController.index()
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
-GET     /api     controllers.ApplicationController.index
-POST     /api/create     controllers.ApplicationController.create
-GET     /api/read/:id     controllers.ApplicationController.read(id: String)
-PUT     /api/update/:id     controllers.ApplicationController.update(id: String)
-DELETE     /api/delete/:id   controllers.ApplicationController.delete(id: String)
+GET     /userPage     controllers.UserController.userPage()
 
+# Home page
+GET     /                           controllers.HomeController.index()
+GET     /search                     controllers.HomeController.search()
 
+# User management
+GET     /register                   controllers.UserController.registerPage()
+POST    /register                   controllers.UserController.register()
+GET     /login                      controllers.UserController.login()
+POST    /login                      controllers.UserController.validateLogin()
+GET     /logout                     controllers.UserController.logout()
+GET     /user                       controllers.UserController.userPage()
 
+# Book management
+POST    /books/add                  controllers.BookController.addToFavorites()
+POST    /books/remove               controllers.BookController.removeFromFavorites()
+
+# API endpoints
+GET     /api/users                  controllers.UserController.index()
+GET     /api/users/:id              controllers.UserController.read(id: String)
+POST    /api/users                  controllers.UserController.create()
+PUT     /api/users/:id              controllers.UserController.update(id: String)
+DELETE  /api/users/:id              controllers.UserController.delete(id: String)
 
 GET     /hobbit                       controllers.ApplicationController.hobbit
 GET     /assets/*file   controllers.Assets.versioned(path="/public", file: Asset)
-
-
 GET     /library/google/:search      controllers.ApplicationController.getGoogleBook(search: String)
 GET     /library/googleBook/:search       controllers.ApplicationController.googleBookSearch(search: String)
 
 #GET     /example                           controllers.ApplicationController.example()
-
