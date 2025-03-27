@@ -2,13 +2,13 @@
 
 @main("My Books") {
 <div class="container">
-    <h1>Welcome, @username!</h1>
+    <h1>Hello @(username.capitalize)!</h1>
 
-    <h2>My Books</h2>
+    <h2>@(username.capitalize)'s Book Burrow</h2>
 
     @if(books.isEmpty) {
     <p>You haven't added any books to your collection yet.</p>
-    <a href="@routes.HomeController.index()" class="btn">Search for Books</a>
+    <p>Search for books and add them to your collection!</p>
     } else {
     <div class="book-grid">
         @for(book <- books) {
@@ -22,6 +22,11 @@
                 @book.description
                 }
             </p>
+            <form action="@routes.ApplicationController.hobbit" method="GET" class="book-action">
+                @helper.CSRF.formField
+                <input type="hidden" name="isbn" value="@book.isbn">
+                <button type="submit" class="btn">More Info</button>
+            </form>
 
             <form action="@routes.BookController.removeFromFavorites()" method="POST" class="book-action">
                 @helper.CSRF.formField

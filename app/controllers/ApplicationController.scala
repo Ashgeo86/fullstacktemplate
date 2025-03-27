@@ -27,13 +27,6 @@ class ApplicationController @Inject()(
     }
   }
 
-  def read(id: String): Action[AnyContent] = Action.async { implicit request =>
-    repositoryService.read(id).map {
-      case Right(data) => Ok(Json.toJson(data))
-      case Left(_) => BadRequest("Bad request")
-    }
-  }
-
   def update(id: String): Action[JsValue] = Action.async(parse.json) { implicit request =>
     request.body.validate[DataModel] match {
       case JsSuccess(dataModel, _) => repositoryService.update(id, dataModel).map {
