@@ -96,12 +96,16 @@
         .search-form button {
             border-radius: 0 4px 4px 0;
         }
+        .book-action {
+            margin-top: auto; /* Push to bottom */
+            padding-top: 10px;
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>Book Search App</h1>
+            <h1>The Hobbit Hole</h1>
             <nav>
                 <a href="@routes.HomeController.index()">Home</a>
                 @if(request.session.get("userId").isDefined) {

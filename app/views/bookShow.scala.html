@@ -11,7 +11,7 @@
     } else {
     <div class="book-grid">
         @for(book <- books.items) {
-            <div class="card p-4" style="width: 18rem;">
+        <div class="book-card">
                 <img src="@{
                             book.volumeInfo.imageLinks match {
                                 case Some(n) => n.thumbnail
@@ -36,7 +36,7 @@
                 </p>
 
                 @if(request.session.get("userId").isDefined) {
-                <form action="@routes.BookController.addToFavorites()" method="POST">
+                <form action="@routes.BookController.addToFavorites()" method="POST" class="book-action">
                     @helper.CSRF.formField
                     <input type="hidden" name="isbn" value="@book.volumeInfo.industryIdentifiers.mkString(",")">
                     <input type="hidden" name="title" value="@book.volumeInfo.title">
